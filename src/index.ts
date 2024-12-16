@@ -9,6 +9,6 @@ export type FileViewerOptions = {
 export function openFileAsync(
   uri: string,
   { viewTag }: FileViewerOptions = {}
-): Promise<string> {
+): Promise<void> {
   return FileViewer.openFileAsync(uri, viewTag);
 }
