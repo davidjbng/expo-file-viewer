@@ -2,13 +2,21 @@ package expo.modules.fileviewer
 
 import android.content.Intent
 import android.net.Uri
+import android.util.Log
 import androidx.core.content.ContextCompat.startActivity
 import androidx.core.view.ContentInfoCompat.Flags
+import expo.modules.interfaces.filesystem.Permission
 import expo.modules.kotlin.modules.Module
 import expo.modules.kotlin.modules.ModuleDefinition
 import expo.modules.kotlin.Promise
+import expo.modules.kotlin.exception.toCodedException
+import java.util.regex.Pattern
+import java.io.IOException
+
+private const val REQUEST_CODE = 43
 
 class ExpoFileViewerModule : Module() {
+  private var pendingPromise: Promise? = null
   // Each module class must implement the definition function. The definition consists of components
   // that describes the module's functionality and behavior.
   // See https://docs.expo.dev/modules/module-api for more details about available components.
@@ -21,13 +29,22 @@ class ExpoFileViewerModule : Module() {
     // Sets constant properties on the module. Can take a dictionary or a closure that returns a dictionary.
     AsyncFunction("openFileAsync") { uri: String, viewTag: Int?, promise: Promise ->
       val parsedUri = Uri.parse(uri)
+      Log.i("ExpoFileViewer", "Found url $parsedUri")
+
       val intent = Intent(Intent.ACTION_VIEW).apply {
         data = parsedUri
-        flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
       }
       val packageManager = appContext.reactContext?.packageManager ?: throw Error("Did not find packageManager from react context")
+
       if (intent.resolveActivity(packageManager) != null) {
-        appContext.currentActivity?.startActivity(intent) ?: throw Error("Did not find currentActivity")
+        try {
+          appContext.throwingActivity.startActivityForResult(intent, REQUEST_CODE)
+          pendingPromise = promise
+        } catch (e: Throwable) {
+          promise.reject(e.toCodedException())
+        }
+        appContext.throwingActivity.startActivityForResult(intent, REQUEST_CODE)
       }
       promise.resolve()
     }

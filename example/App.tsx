@@ -35,14 +35,7 @@ export default function App() {
   return (
     <SafeAreaView>
       <ScrollView style={{ padding: 20 }}>
-        <Text
-          style={{
-            flex: 1,
-            fontSize: 36,
-          }}
-        >
-          Expo File Viewer Example
-        </Text>
+        <Text style={{ fontSize: 24 }}>Expo File Viewer Example</Text>
         <View style={{ marginTop: 30, gap: 20 }}>
           <View style={{ gap: 10, alignItems: "flex-start" }}>
             <Text>{pdf.localUri}</Text>
@@ -54,9 +47,12 @@ export default function App() {
                   ? findNodeHandle(pdfViewRef.current)
                   : undefined;
 
-                openFileAsync(pdf.localUri!, { viewTag }).catch((e) =>
-                  Alert.alert("Error", e.message)
-                );
+                getFileUri(pdf).then((uri) => {
+                  console.log("Opening PDF", uri);
+                  openFileAsync(uri, { viewTag }).catch((e) =>
+                    Alert.alert("Error", e.message)
+                  );
+                });
               }}
             />
           </View>
@@ -69,9 +65,12 @@ export default function App() {
                   ? findNodeHandle(imageViewRef.current)
                   : undefined;
 
-                openFileAsync(image.localUri!, { viewTag }).catch((e) =>
-                  Alert.alert("Error", e.message)
-                );
+                getFileUri(image).then((uri) => {
+                  console.log("Opening image", uri);
+                  openFileAsync(uri, { viewTag }).catch((e) =>
+                    Alert.alert("Error", e.message)
+                  );
+                });
               }}
               style={{
                 padding: 10,
@@ -97,7 +96,7 @@ export default function App() {
 }
 
 async function getFileUri(asset: Asset) {
-  const dir = FileSystem.cacheDirectory + "file-viewer/";
+  const dir = FileSystem.documentDirectory + "file-viewer/";
   const dirInfo = await FileSystem.getInfoAsync(dir);
   if (!dirInfo.exists) {
     await FileSystem.makeDirectoryAsync(dir);
