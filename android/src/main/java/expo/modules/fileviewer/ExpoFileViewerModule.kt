@@ -41,22 +41,27 @@ class ExpoFileViewerModule : Module() {
                         ?: throw Error("Failed to find transition view")
                 val thumbnail = transitionView.drawToBitmap()
 
-                options = ActivityOptions.makeCustomAnimation(
-                    appContext.currentActivity,
-                    android.R.anim.fade_in,
-                    android.R.anim.fade_out
-                )
+//                options = ActivityOptions.makeCustomAnimation(
+//                    appContext.currentActivity,
+//                    android.R.anim.fade_in,
+//                    android.R.anim.fade_out,
+//                )
 //                options =
-//                    ActivityOptions.makeThumbnailScaleUpAnimation(transitionView, thumbnail, 0, 0)
-
-//                options = ActivityOptions
-//                    .makeClipRevealAnimation(
+//                    ActivityOptions.makeThumbnailScaleUpAnimation(
 //                        transitionView,
-//                        transitionView.width / 2,
-//                        transitionView.height / 2,
-//                        transitionView.width,
-//                        transitionView.height
+//                        thumbnail,
+//                        0,
+//                        0
 //                    )
+
+                options = ActivityOptions
+                    .makeClipRevealAnimation(
+                        transitionView,
+                        0,
+                        0,
+                        transitionView.width,
+                        transitionView.height
+                    )
 //                options = ActivityOptions
 //                    .makeScaleUpAnimation(
 //                        transitionView,
@@ -65,12 +70,12 @@ class ExpoFileViewerModule : Module() {
 //                        transitionView.width,
 //                        transitionView.height,
 //                    )
-                // options = ActivityOptions
-                //     .makeSceneTransitionAnimation(
-                //         appContext.currentActivity,
-                //         transitionView,
-                //         "image"
-                //     )
+//                 options = ActivityOptions
+//                     .makeSceneTransitionAnimation(
+//                         appContext.currentActivity,
+//                         transitionView,
+//                         "image"
+//                     )
             }
             try {
                 appContext.throwingActivity.startActivityForResult(
