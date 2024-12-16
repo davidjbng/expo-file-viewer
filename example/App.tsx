@@ -26,7 +26,11 @@ export default function App() {
   }
 
   if (!assets) {
-    return <Text>Loading...</Text>;
+    return (
+      <SafeAreaView>
+        <Text>Loading...</Text>
+      </SafeAreaView>
+    );
   }
 
   const pdf = assets.at(0)!;
@@ -36,57 +40,52 @@ export default function App() {
     <SafeAreaView>
       <ScrollView style={{ padding: 20 }}>
         <Text style={{ fontSize: 24 }}>Expo File Viewer Example</Text>
-        <View style={{ marginTop: 30, gap: 20 }}>
-          <View style={{ gap: 10, alignItems: "flex-start" }}>
-            <Text>{pdf.localUri}</Text>
-            <Button
-              ref={pdfViewRef}
-              title="Open PDF"
-              onPress={() => {
-                const viewTag = pdfViewRef.current
-                  ? findNodeHandle(pdfViewRef.current)
-                  : undefined;
+        <View style={{ marginTop: 30, gap: 20, alignItems: "flex-start" }}>
+          <Button
+            ref={pdfViewRef}
+            title="Open PDF"
+            onPress={() => {
+              const viewTag = pdfViewRef.current
+                ? findNodeHandle(pdfViewRef.current)
+                : undefined;
 
-                FileSystem.getContentUriAsync(pdf.localUri!).then((uri) => {
-                  openFileAsync(uri, { viewTag }).catch((e) =>
-                    Alert.alert("Error", e.message)
-                  );
-                });
+              FileSystem.getContentUriAsync(pdf.localUri!).then((uri) => {
+                openFileAsync(uri, { viewTag }).catch((e) =>
+                  Alert.alert("Error", e.message)
+                );
+              });
+            }}
+          />
+
+          <Pressable
+            onPress={() => {
+              const viewTag = imageViewRef.current
+                ? findNodeHandle(imageViewRef.current)
+                : undefined;
+
+              FileSystem.getContentUriAsync(image.localUri!).then((uri) => {
+                openFileAsync(uri, { viewTag }).catch((e) =>
+                  Alert.alert("Error", e.message)
+                );
+              });
+            }}
+            style={{
+              padding: 10,
+              borderRadius: 10,
+              backgroundColor: "royalblue",
+              alignSelf: "stretch",
+            }}
+          >
+            <Image
+              ref={imageViewRef}
+              source={{ uri: image.localUri! }}
+              style={{
+                borderRadius: 5,
+                height: 200,
+                objectFit: "cover",
               }}
             />
-          </View>
-          <View style={{ gap: 10 }}>
-            <Text>{image.localUri}</Text>
-            <Pressable
-              ref={imageViewRef}
-              onPress={() => {
-                const viewTag = imageViewRef.current
-                  ? findNodeHandle(imageViewRef.current)
-                  : undefined;
-
-                FileSystem.getContentUriAsync(image.localUri!).then((uri) => {
-                  openFileAsync(uri, { viewTag }).catch((e) =>
-                    Alert.alert("Error", e.message)
-                  );
-                });
-              }}
-              style={{
-                padding: 10,
-                borderRadius: 10,
-                backgroundColor: "royalblue",
-              }}
-            >
-              <Image
-                source={{ uri: image.localUri! }}
-                style={{
-                  borderRadius: 5,
-                  flex: 1,
-                  height: 200,
-                  objectFit: "cover",
-                }}
-              />
-            </Pressable>
-          </View>
+          </Pressable>
         </View>
       </ScrollView>
     </SafeAreaView>
