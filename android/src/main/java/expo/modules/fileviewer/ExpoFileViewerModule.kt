@@ -55,6 +55,7 @@ class ExpoFileViewerModule : Module() {
                     options.toBundle()
                 )
                 pendingPromise = promise
+                // TODO: resolve promise
             } catch (e: Throwable) {
                 promise.reject(e.toCodedException())
             }
