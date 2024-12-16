@@ -27,17 +27,13 @@ class ExpoFileViewerModule : Module() {
         data = parsedUri
         flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
       }
-      val packageManager = appContext.reactContext?.packageManager ?: throw Error("Did not find packageManager from react context")
-
-      if (intent.resolveActivity(packageManager) != null) {
-        try {
-          appContext.throwingActivity.startActivityForResult(intent, REQUEST_CODE)
-          pendingPromise = promise
-        } catch (e: Throwable) {
-          promise.reject(e.toCodedException())
-        }
+      
+      try {
+        appContext.throwingActivity.startActivityForResult(intent, REQUEST_CODE)
+        pendingPromise = promise
+      } catch (e: Throwable) {
+        promise.reject(e.toCodedException())
       }
-      promise.resolve()
     }
   }
 }
