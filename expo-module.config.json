@@ -1,17 +1,9 @@
 {
-  "platforms": [
-    "apple",
-    "android",
-    "web"
-  ],
+  "platforms": ["apple", "android"],
   "apple": {
-    "modules": [
-      "ExpoFileViewerModule"
-    ]
+    "modules": ["ExpoFileViewerModule"]
   },
   "android": {
-    "modules": [
-      "expo.modules.fileviewer.ExpoFileViewerModule"
-    ]
+    "modules": ["expo.modules.fileviewer.ExpoFileViewerModule"]
   }
 }

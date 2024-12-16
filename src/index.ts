@@ -3,7 +3,7 @@
 import FileViewer from "./ExpoFileViewerModule";
 
 export type FileViewerOptions = {
-  viewTag?: number;
+  viewTag?: number | null;
 };
 
 export function openFileAsync(
