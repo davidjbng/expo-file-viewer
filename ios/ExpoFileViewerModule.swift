@@ -10,8 +10,8 @@ public class ExpoFileViewerModule: Module {
     // The module will be accessible from `requireNativeModule('ExpoFileViewer')` in JavaScript.
     Name("ExpoFileViewer")
 
-    AsyncFunction("openFileAsync") { (uri: String, viewTag: Int, promise: Promise) in
-      promise.resolve()
+    AsyncFunction("openFileAsync") { (uri: String, viewTag: Int?, promise: Promise) in
+      promise.resolve(uri)
     }
   }
 }

@@ -16,8 +16,8 @@ class ExpoFileViewerModule : Module() {
     Name("ExpoFileViewer")
 
     // Sets constant properties on the module. Can take a dictionary or a closure that returns a dictionary.
-    AsyncFunction("openFileAsync") { uri: String, viewTag: Number?, promise: Promise ->
-      promise.resolve()
+    AsyncFunction("openFileAsync") { uri: String, viewTag: Int?, promise: Promise ->
+      promise.resolve(uri)
     }
   }
 }

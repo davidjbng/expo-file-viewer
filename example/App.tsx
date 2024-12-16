@@ -1,22 +1,33 @@
 import { openFileAsync } from "expo-file-viewer";
-import { Button, SafeAreaView, ScrollView, Text, View } from "react-native";
+import {
+  Alert,
+  Button,
+  SafeAreaView,
+  ScrollView,
+  Text,
+  View,
+} from "react-native";
 
 export default function App() {
   return (
     <SafeAreaView style={{ margin: 20 }}>
-      <ScrollView style={{ margin: 20 }}>
+      <ScrollView>
         <Text
           style={{
             flex: 1,
             fontSize: 36,
           }}
         >
-          Module API Example
+          Expo File Viewer Example
         </Text>
-        <View style={{ margin: 30, gap: 20, alignItems: "flex-start" }}>
+        <View style={{ marginTop: 30, gap: 20, alignItems: "flex-start" }}>
           <Button
             title="Open PDF"
-            onPress={() => openFileAsync("hello world")}
+            onPress={() => {
+              openFileAsync("hello world")
+                .then((r) => Alert.alert("Success", r))
+                .catch((e) => Alert.alert("Error", e.message));
+            }}
           />
         </View>
       </ScrollView>
