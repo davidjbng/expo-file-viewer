@@ -1,0 +1,17 @@
+{
+  "platforms": [
+    "apple",
+    "android",
+    "web"
+  ],
+  "apple": {
+    "modules": [
+      "ExpoFileViewerModule"
+    ]
+  },
+  "android": {
+    "modules": [
+      "expo.modules.fileviewer.ExpoFileViewerModule"
+    ]
+  }
+}
