@@ -1,4 +1,4 @@
-import { useAssets, type Asset } from "expo-asset";
+import { useAssets } from "expo-asset";
 import * as FileSystem from "expo-file-system";
 import { openFileAsync } from "expo-file-viewer";
 import { useRef } from "react";
@@ -47,8 +47,7 @@ export default function App() {
                   ? findNodeHandle(pdfViewRef.current)
                   : undefined;
 
-                getFileUri(pdf).then((uri) => {
-                  console.log("Opening PDF", uri);
+                FileSystem.getContentUriAsync(pdf.localUri!).then((uri) => {
                   openFileAsync(uri, { viewTag }).catch((e) =>
                     Alert.alert("Error", e.message)
                   );
@@ -65,8 +64,7 @@ export default function App() {
                   ? findNodeHandle(imageViewRef.current)
                   : undefined;
 
-                getFileUri(image).then((uri) => {
-                  console.log("Opening image", uri);
+                FileSystem.getContentUriAsync(image.localUri!).then((uri) => {
                   openFileAsync(uri, { viewTag }).catch((e) =>
                     Alert.alert("Error", e.message)
                   );
@@ -93,22 +91,4 @@ export default function App() {
       </ScrollView>
     </SafeAreaView>
   );
-}
-
-async function getFileUri(asset: Asset) {
-  const dir = FileSystem.documentDirectory + "file-viewer/";
-  const dirInfo = await FileSystem.getInfoAsync(dir);
-  if (!dirInfo.exists) {
-    await FileSystem.makeDirectoryAsync(dir);
-  }
-
-  const fileUri = `${dir}${asset.name}.${asset.type}`;
-  console.log("Downloading to", fileUri);
-  const fileDownloadResult = await FileSystem.downloadAsync(asset.uri, fileUri);
-
-  const contentUri = await FileSystem.getContentUriAsync(
-    fileDownloadResult.uri
-  );
-  console.log("Content URI", contentUri);
-  return contentUri;
 }
