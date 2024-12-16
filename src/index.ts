@@ -1,5 +1,14 @@
 // Reexport the native module. On web, it will be resolved to ExpoFileViewerModule.web.ts
 // and on native platforms to ExpoFileViewerModule.ts
-export { default } from './ExpoFileViewerModule';
-export { default as ExpoFileViewerView } from './ExpoFileViewerView';
-export * from  './ExpoFileViewer.types';
+import FileViewer from "./ExpoFileViewerModule";
+
+export type FileViewerOptions = {
+  viewTag?: number;
+};
+
+export function openFileAsync(
+  uri: string,
+  { viewTag }: FileViewerOptions = {}
+): Promise<void> {
+  return FileViewer.openFileAsync(uri, viewTag);
+}
