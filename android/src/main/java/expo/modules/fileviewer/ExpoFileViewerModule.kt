@@ -5,7 +5,6 @@ import android.content.Intent
 import android.net.Uri
 import android.view.View
 import android.view.Window
-import androidx.core.view.drawToBitmap
 import expo.modules.kotlin.Promise
 import expo.modules.kotlin.exception.toCodedException
 import expo.modules.kotlin.functions.Queues
@@ -39,43 +38,15 @@ class ExpoFileViewerModule : Module() {
                 val transitionView =
                     appContext.currentActivity?.window?.decorView?.findViewById<View>(viewTag)
                         ?: throw Error("Failed to find transition view")
-                val thumbnail = transitionView.drawToBitmap()
-
-//                options = ActivityOptions.makeCustomAnimation(
-//                    appContext.currentActivity,
-//                    android.R.anim.fade_in,
-//                    android.R.anim.fade_out,
-//                )
-//                options =
-//                    ActivityOptions.makeThumbnailScaleUpAnimation(
-//                        transitionView,
-//                        thumbnail,
-//                        0,
-//                        0
-//                    )
 
                 options = ActivityOptions
-                    .makeClipRevealAnimation(
+                    .makeScaleUpAnimation(
                         transitionView,
                         0,
                         0,
                         transitionView.width,
                         transitionView.height
                     )
-//                options = ActivityOptions
-//                    .makeScaleUpAnimation(
-//                        transitionView,
-//                        0,
-//                        0,
-//                        transitionView.width,
-//                        transitionView.height,
-//                    )
-//                 options = ActivityOptions
-//                     .makeSceneTransitionAnimation(
-//                         appContext.currentActivity,
-//                         transitionView,
-//                         "image"
-//                     )
             }
             try {
                 appContext.throwingActivity.startActivityForResult(
