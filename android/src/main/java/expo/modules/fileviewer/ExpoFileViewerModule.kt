@@ -11,7 +11,7 @@ import expo.modules.kotlin.functions.Queues
 import expo.modules.kotlin.modules.Module
 import expo.modules.kotlin.modules.ModuleDefinition
 
-private const val REQUEST_CODE = 43
+private const val REQUEST_CODE = 315
 
 class ExpoFileViewerModule : Module() {
     private var pendingPromise: Promise? = null
@@ -27,11 +27,6 @@ class ExpoFileViewerModule : Module() {
 
         // Sets constant properties on the module. Can take a dictionary or a closure that returns a dictionary.
         AsyncFunction("openFileAsync") { uri: String, viewTag: Int?, promise: Promise ->
-            val parsedUri = Uri.parse(uri)
-            val intent = Intent(Intent.ACTION_VIEW).apply {
-                data = parsedUri
-                flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
-            }
             var options = ActivityOptions.makeBasic()
             if (viewTag != null) {
                 appContext.currentActivity?.window?.addFlags(Window.FEATURE_ACTIVITY_TRANSITIONS)
@@ -48,17 +43,29 @@ class ExpoFileViewerModule : Module() {
                         transitionView.height
                     )
             }
+
             try {
                 appContext.throwingActivity.startActivityForResult(
-                    intent,
+                    Intent(Intent.ACTION_VIEW).apply {
+                        data = Uri.parse(uri)
+                        flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+                    },
                     REQUEST_CODE,
                     options.toBundle()
                 )
                 pendingPromise = promise
-                // TODO: resolve promise
             } catch (e: Throwable) {
                 promise.reject(e.toCodedException())
             }
         }.runOnQueue(Queues.MAIN)
+
+        OnActivityResult { _, payload ->
+            if (payload.requestCode != REQUEST_CODE) {
+                return@OnActivityResult
+            }
+
+            pendingPromise?.resolve()
+            pendingPromise = null
+        }
     }
 }

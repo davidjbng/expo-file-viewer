@@ -50,9 +50,10 @@ export default function App() {
                 : undefined;
 
               FileSystem.getContentUriAsync(pdf.localUri!).then((uri) => {
-                openFileAsync(uri, { viewTag }).catch((e) =>
-                  Alert.alert("Error", e.message)
-                );
+                openFileAsync(uri, { viewTag }).catch((e) => {
+                  console.error(e);
+                  Alert.alert("Error", e.message);
+                });
               });
             }}
           />
@@ -64,9 +65,10 @@ export default function App() {
                 : undefined;
 
               FileSystem.getContentUriAsync(image.localUri!).then((uri) => {
-                openFileAsync(uri, { viewTag }).catch((e) =>
-                  Alert.alert("Error", e.message)
-                );
+                openFileAsync(uri, { viewTag }).catch((e) => {
+                  console.error(e);
+                  Alert.alert("Error", e.message);
+                });
               });
             }}
             style={{
